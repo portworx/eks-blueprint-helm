@@ -105,8 +105,10 @@ serviceAccount:
 aws:  
   awsMarketplace: false
   eksServiceAccount: 
-  awsAccessKeyId:
-  awsSecretAccessKey:
+  awsAccessKeyId: 
+  awsSecretAccessKey: 
+
+deleteType:
 
 clusterToken:
   create: false                    # Create cluster token
