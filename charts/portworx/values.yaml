@@ -103,10 +103,10 @@ serviceAccount:
     create: true
     name:
 aws:  
-  awsMarketplace: false
+  marketplace: false
   eksServiceAccount: 
-  awsAccessKeyId: 
-  awsSecretAccessKey: 
+  accessKeyId: 
+  secretAccessKey: 
 
 deleteType:
 
