@@ -194,7 +194,7 @@ spec:
         name: px-azure
         key: AZURE_TENANT_ID
   {{- end }}
-  {{- if .Values.aws.awsAccessKeyId}}
+  {{- if and (.Values.aws.accessKeyId) (.Values.aws.secretAccessKey) }}
   - name: AWS_ACCESS_KEY_ID
     valueFrom:
       secretKeyRef:
