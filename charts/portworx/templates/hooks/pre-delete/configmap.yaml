@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-predelete-configmap
+  namespace: kube-system 
+data:
+  deletePatch.sh: |-
+{{ .Files.Get "scripts/deletePatch.sh" | indent 4}}

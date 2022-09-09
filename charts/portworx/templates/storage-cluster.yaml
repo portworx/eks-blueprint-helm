@@ -25,7 +25,7 @@
   {{- $miscArgs := include "px.miscArgs" . }}
   {{- $volumesPresent := include "px.volumesPresent" . }}
   {{- $serviceAccount := .Values.aws.eksServiceAccount | default "none" }}
-
+  
 kind: StorageCluster
 apiVersion: core.libopenstorage.org/v1
 metadata:

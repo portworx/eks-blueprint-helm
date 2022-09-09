@@ -2,6 +2,7 @@
 {{- $customRegistryURL := .Values.customRegistryURL | default "none" }}
 {{- $registrySecret := .Values.registrySecret | default "none" }}
 {{- $clusterName := .Values.clusterName }}
+{{- $deleteType := .Values.deleteType | default "UninstallAndWipe" }}
 
 apiVersion: batch/v1
 kind: Job
@@ -37,5 +38,16 @@ spec:
           {{- end}}
           command: ['/bin/sh',
                     '-c',
-                    'kubectl -n kube-system delete storagecluster {{ $clusterName }} --ignore-not-found']
+                    '/opt/scripts/deletePatch.sh {{ $clusterName }} {{ $deleteType}} && kubectl -n kube-system delete storagecluster {{ $clusterName }} --ignore-not-found']
+          volumeMounts:
+          - name: config-volume-pre-delete
+            mountPath: /opt/scripts
+      volumes:
+        - name: config-volume-pre-delete
+          configMap:
+            name: {{ .Release.Name }}-predelete-configmap
+            defaultMode: 0777
+
 {{- end }}
+
+
