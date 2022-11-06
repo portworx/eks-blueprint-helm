@@ -282,3 +282,13 @@ Generate a random token for storage provisioning
         {{- cat "3a3fcb1c-7ee5-4f3b-afe3-d293c3f9beb4" }}
     {{- end }}
 {{- end -}}
+
+{{- define "px.getDeploymentNamespace" -}}
+{{- if (.Release.Namespace) -}}
+    {{- if (eq "default" .Release.Namespace) -}}
+        {{- printf "kube-system"  -}}
+    {{- else -}}
+        {{- printf "%s" .Release.Namespace -}}
+    {{- end -}}
+{{- end -}}
+{{- end -}}

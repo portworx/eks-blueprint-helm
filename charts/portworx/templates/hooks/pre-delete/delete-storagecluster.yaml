@@ -7,7 +7,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  namespace: kube-system
+  namespace: {{ template "px.getDeploymentNamespace" . }}
   name: px-hook-delete-storagecluster
   labels:
     heritage: {{.Release.Service | quote }}
@@ -38,7 +38,7 @@ spec:
           {{- end}}
           command: ['/bin/sh',
                     '-c',
-                    '/opt/scripts/deletePatch.sh {{ $clusterName }} {{ $deleteType}} && kubectl -n kube-system delete storagecluster {{ $clusterName }} --ignore-not-found']
+                    '/opt/scripts/deletePatch.sh {{ $clusterName }} {{ $deleteType}} {{ template "px.getDeploymentNamespace" . }} && kubectl -n {{ template "px.getDeploymentNamespace" . }} delete storagecluster {{ $clusterName }} --ignore-not-found']
           volumeMounts:
           - name: config-volume-pre-delete
             mountPath: /opt/scripts
