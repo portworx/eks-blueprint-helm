@@ -56,7 +56,7 @@ storkSpec:                            # Optional Stork configurations
   args:                               # Pass arguments to Stork container. Example: verbose='true';webhook-controller='false'
   volumes:                            # Add volumes to Stork container. Refer the top level volumes for schema.
 
-customRegistryURL:
+customRegistryURL: 709825985650.dkr.ecr.us-east-1.amazonaws.com/portworx
 registrySecret:
 licenseSecret:
 
@@ -119,3 +119,11 @@ clusterToken:
 
 deleteStrategy:                           # Optional: Delete strategy for the portworx cluster
   type:                                   # Valid values: Uninstall, UninstallAndWipe
+
+repo:
+  enterprise: 709825985650.dkr.ecr.us-east-1.amazonaws.com/portworx
+  dr: 709825985650.dkr.ecr.us-east-1.amazonaws.com/portworx/dr
+
+versions:
+  enterprise: "2.12.0"
+  autoPilot: "1.3.3"

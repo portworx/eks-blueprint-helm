@@ -32,109 +32,84 @@ release: {{ .Release.Name | quote }}
 {{printf "%s.%s" $major $minor }}
 {{- end -}}
 
-{{- define "px.getPxOperatorImage" -}}
+{{- define "px.getOperatorImage" -}}
+{{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
-    {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-        {{ cat (trim .Values.customRegistryURL) "/px-operator" | replace " " ""}}
-    {{- else -}}
-        {{cat (trim .Values.customRegistryURL) "/portworx/px-operator" | replace " " ""}}
-    {{- end -}}
+  {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
+    {{- cat (trim .Values.customRegistryURL) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
+  {{- else -}}
+    {{- cat (trim .Values.customRegistryURL) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
+  {{- end -}}
 {{- else -}}
-    {{ "portworx/px-operator" }}
+  {{- if eq $product "PX-ENTERPRISE-DR" }}
+    {{- cat (trim .Values.repo.dr) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
+  {{- else }}
+    {{- cat (trim .Values.repo.enterprise) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
+  {{- end }}
 {{- end -}}
 {{- end -}}
 
 {{- define "px.getImage" -}}
+{{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
-    {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-        {{- if .Values.openshiftInstall -}}
-            {{ cat (trim .Values.customRegistryURL) "/px-monitor" | replace " " ""}}
-        {{- else -}}
-            {{ cat (trim .Values.customRegistryURL) "/oci-monitor" | replace " " ""}}
-        {{- end -}}
-    {{- else -}}
-        {{- if .Values.openshiftInstall -}}
-            {{cat (trim .Values.customRegistryURL) "/portworx/px-monitor" | replace " " ""}}
-        {{- else -}}
-            {{cat (trim .Values.customRegistryURL) "/portworx/oci-monitor" | replace " " ""}}
-        {{- end -}}
-    {{- end -}}
+  {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
+    {{- cat (trim .Values.customRegistryURL) "/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+  {{- else -}}
+    {{- cat (trim .Values.customRegistryURL) "/px-enterprise:" (trim .Values.versions.enterprise)| replace " " ""}}
+  {{- end -}}
 {{- else -}}
-    {{- if .Values.openshiftInstall -}}
-        {{ "registry.connect.redhat.com/portworx/px-monitor" }}
-    {{- else -}}
-        {{ "portworx/oci-monitor" }}
-    {{- end -}}
+  {{- cat "portworx/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+{{- end -}}
+{{- end -}}
+
+{{- define "px.getOCIImage" -}}
+{{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
+{{- if (.Values.customRegistryURL) -}}
+  {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
+    {{- cat (trim .Values.customRegistryURL) "/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
+  {{- else -}}
+    {{- cat (trim .Values.customRegistryURL) "/oci-monitor:" (trim .Values.imageVersion)| replace " " ""}}
+  {{- end -}}
+{{- else -}}
+  {{- if eq $product "PX-ENTERPRISE-DR" }}
+    {{- cat (trim .Values.repo.dr) "/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
+  {{- else }}
+    {{- cat (trim .Values.repo.enterprise) "/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
+  {{- end }}
 {{- end -}}
 {{- end -}}
 
 {{- define "px.getStorkImage" -}}
+{{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
-    {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-        {{ cat (trim .Values.customRegistryURL) "/stork" | replace " " ""}}
-    {{- else -}}
-        {{cat (trim .Values.customRegistryURL) "/openstorage/stork" | replace " " ""}}
-    {{- end -}}
+  {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
+    {{- cat (trim .Values.customRegistryURL) "/stork:" (trim .Values.storkVersion)| replace " " ""}}
+  {{- else -}}
+    {{- cat (trim .Values.customRegistryURL) "/stork:" (trim .Values.storkVersion) | replace " " ""}}
+  {{- end -}}
 {{- else -}}
-    {{ "openstorage/stork" }}
+  {{- if eq $product "PX-ENTERPRISE-DR" }}
+    {{- cat (trim .Values.repo.dr) "/stork:" (trim .Values.storkVersion) | replace " " ""}}
+  {{- else }}
+    {{- cat (trim .Values.repo.enterprise) "/stork:" (trim .Values.storkVersion) | replace " " ""}}
+  {{- end }}
 {{- end -}}
 {{- end -}}
 
-{{- define "px.getk8sImages" -}}
-{{- $version := .Capabilities.KubeVersion.GitVersion | regexFind "^v\\d+\\.\\d+\\.\\d+" | trimPrefix "v" -}}
+{{- define "px.getAutopilotImage" -}}
+{{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
-    {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-        {{ trim .Values.customRegistryURL }}
-    {{- else -}}
-        {{- if or (or (and (semverCompare ">= 1.16.14" $version ) (semverCompare "<=1.17.0"  $version)) (and (semverCompare ">= 1.17.10" $version) (semverCompare "<=1.18.0" $version ))) (semverCompare ">=1.18.7" $version) -}}
-           {{cat (trim .Values.customRegistryURL) "/k8s.gcr.io" | replace " " ""}}
-        {{- else -}}
-           {{cat (trim .Values.customRegistryURL) "/gcr.io/google_containers" | replace " " ""}}
-        {{- end -}}
-    {{- end -}}
+  {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
+    {{- cat (trim .Values.customRegistryURL) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
+  {{- else -}}
+    {{- cat (trim .Values.customRegistryURL) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
+  {{- end -}}
 {{- else -}}
-     {{- if or (or (and (semverCompare ">= 1.16.14" $version ) (semverCompare "<=1.17.0"  $version)) (and (semverCompare ">= 1.17.10" $version) (semverCompare "<=1.18.0" $version ))) (semverCompare ">=1.18.7" $version) -}}
-        {{ "k8s.gcr.io" }}
-     {{- else -}}
-        {{ "gcr.io/google_containers" }}
-    {{- end -}}
-{{- end -}}
-{{- end -}}
-
-
-{{- define "px.getPauseImage" -}}
-{{- if (.Values.customRegistryURL) -}}
-    {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-        {{ trim .Values.customRegistryURL }}
-    {{- else -}}
-        {{cat (trim .Values.customRegistryURL) "/k8s.gcr.io" | replace " " ""}}
-    {{- end -}}
-{{- else -}}
-        {{ "k8s.gcr.io" }}
-{{- end -}}
-{{- end -}}
-
-{{- define "px.getcsiImages" -}}
-{{- if (.Values.customRegistryURL) -}}
-    {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-        {{ trim .Values.customRegistryURL }}
-    {{- else -}}
-        {{cat (trim .Values.customRegistryURL) "/quay.io/k8scsi" | replace " " ""}}
-    {{- end -}}
-{{- else -}}
-        {{ "quay.io/k8scsi" }}
-{{- end -}}
-{{- end -}}
-
-{{- define "px.getLighthouseImages" -}}
-{{- if (.Values.customRegistryURL) -}}
-    {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-        {{ trim .Values.customRegistryURL }}
-    {{- else -}}
-        {{cat (trim .Values.customRegistryURL) "/portworx" | replace " " ""}}
-    {{- end -}}
-{{- else -}}
-        {{ "portworx" }}
+  {{- if eq $product "PX-ENTERPRISE-DR" }}
+    {{- cat (trim .Values.repo.dr) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
+  {{- else }}
+    {{- cat (trim .Values.repo.enterprise) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
+  {{- end }}
 {{- end -}}
 {{- end -}}
 

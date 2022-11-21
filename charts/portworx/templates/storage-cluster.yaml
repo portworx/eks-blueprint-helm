@@ -63,7 +63,7 @@ metadata:
     app.kubernetes.io/managed-by: {{.Release.Service | quote }}
     app.kubernetes.io/instance: {{.Release.Name | quote }}
 spec:
-  image: portworx/oci-monitor:{{ required "A valid Image tag is required in the SemVer format" .Values.imageVersion }}
+  image: "{{template "px.getOCIImage" . }}"
   imagePullPolicy: Always
   {{- if not (eq $customRegistryURL "none") }}
   customImageRegistry: {{ $customRegistryURL }}
@@ -192,6 +192,8 @@ spec:
         name: px-azure
         key: AZURE_TENANT_ID
   {{- end }}
+  - name: PX_IMAGE
+    value: docker.io/portworx/px-enterprise:2.12.0
   {{- if and (.Values.aws.accessKeyId) (.Values.aws.secretAccessKey) }}
   - name: AWS_ACCESS_KEY_ID
     valueFrom:
@@ -207,9 +209,7 @@ spec:
   stork:
     {{- if (and (.Values.stork) (eq .Values.stork true))}}
     enabled: true
-    {{- if .Values.storkVersion }}
-    image: {{ template "px.getStorkImage" . }}:{{ required "A valid Image tag is required in the SemVer format" .Values.storkVersion }}
-    {{- end }}
+    image: "{{template "px.getStorkImage" . }}"
     {{- with .Values.storkSpec.volumes }}
     volumes:
       {{- toYaml . | nindent 4 }}
@@ -270,6 +270,14 @@ spec:
     enabled: {{ .Values.csi  | default "false" }}
   autopilot:
     enabled: {{ .Values.aut  | default "false" }}
+    {{- if (and (.Values.aut) (eq .Values.aut true))}}
+    image: "{{template "px.getAutopilotImage" . }}"
+    providers:
+    - name: default
+      type: prometheus
+      params:
+        url: http://prometheus:9090
+    {{- end }}  
 
   {{- with .Values.tolerations }}
   placement:

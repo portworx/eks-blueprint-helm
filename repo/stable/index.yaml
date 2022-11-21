@@ -3,9 +3,9 @@ entries:
   portworx:
   - apiVersion: v1
     appVersion: 2.12.0
-    created: "2022-11-09T22:25:36.783388174-07:00"
+    created: "2022-11-20T20:26:40.691524909-07:00"
     description: A Helm chart for installing Portworx on Kubernetes.
-    digest: ffe98907186154c1111793b11ce540a49de778ac717b11cff39be6fa9c664d80
+    digest: 198ef785ff8b02d5aaca6ef5d4b743d427fbda59071f160075abde65846c3011
     home: https://portworx.com/
     icon: https://raw.githubusercontent.com/portworx/helm/master/doc/media/px-logo.png
     name: portworx
@@ -15,7 +15,7 @@ entries:
     - https://raw.githubusercontent.com/portworx/eks-blueprint-helm/main/repo/stable/portworx-2.12.0.tgz
     version: 2.12.0
   - apiVersion: v1
-    created: "2022-11-09T22:25:36.779065004-07:00"
+    created: "2022-11-20T20:26:40.684925266-07:00"
     description: A Helm chart for installing Portworx on Kubernetes.
     digest: f6d89881634b6f6768d82217d15b2d6b3f7c41cde442a8e6749db42d2893b6da
     home: https://portworx.com/
@@ -27,7 +27,7 @@ entries:
     - https://raw.githubusercontent.com/portworx/eks-blueprint-helm/main/repo/stable/portworx-2.11.2.tgz
     version: 2.11.2
   - apiVersion: v1
-    created: "2022-11-09T22:25:36.775378654-07:00"
+    created: "2022-11-20T20:26:40.679839009-07:00"
     description: A Helm chart for installing Portworx on Kubernetes.
     digest: ad091b52829f721fd329bd7335fc5cb0de1487dc9521a9c40ee656aae2911e5f
     home: https://portworx.com/
@@ -38,4 +38,4 @@ entries:
     urls:
     - https://raw.githubusercontent.com/portworx/eks-blueprint-helm/main/repo/stable/portworx-2.11.0.tgz
     version: 2.11.0
-generated: "2022-11-09T22:25:36.771880608-07:00"
+generated: "2022-11-20T20:26:40.670915683-07:00"

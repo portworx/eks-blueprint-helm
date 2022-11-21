@@ -72,7 +72,7 @@ spec:
       containers:
         - name: portworx-operator
           imagePullPolicy: Always
-          image: {{ template "px.getPxOperatorImage" . }}:{{ required "A valid Image tag is required in the SemVer format" .Values.pxOperatorImageVersion }}
+          image: "{{- template "px.getOperatorImage" . }}"
           command:
             - /operator
             - --verbose
