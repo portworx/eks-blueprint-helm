@@ -103,8 +103,8 @@ serviceAccount:
     create: true
     name:
 aws:  
-  marketplace: false
-  eksServiceAccount: 
+  marketplace: true             # By default we want to use marketplace license for Portworx
+  eksServiceAccount:
   accessKeyId: 
   secretAccessKey: 
 
