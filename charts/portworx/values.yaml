@@ -1,5 +1,8 @@
 # Please uncomment and specify values for these options as per your requirements.
 
+# This is the marketplace subscribed product: PX-ENTERPRISE or PX-ENTERPRISE-DR
+awsProduct: "PX-ENTERPRISE"         #This is the default.
+
 deployOperator: true                    # Deploy the Portworx operator
 deployCluster: true                     # Deploy the Portworx cluster
 
