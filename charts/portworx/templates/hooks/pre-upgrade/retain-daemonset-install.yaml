@@ -4,7 +4,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  namespace: kube-system
+  namespace: {{ template "px.getDeploymentNamespace" . }}
   name: px-hook-retain-daemonset-resources
   labels:
     heritage: {{.Release.Service | quote }}
@@ -30,7 +30,7 @@ spec:
           {{- if eq $customRegistryURL "none" }}
           image: "bitnami/kubectl:{{ template "px.kubectlImageTag" . }}"
           {{- else}}
-          image: "{{ $customRegistryURL }}/bitnami/kubectl:{{ template "px.kubectlImageTag" . }}"
+          image: "{{ $customRegistryURL }}/kubectl:{{ template "px.kubectlImageTag" . }}"
           {{- end}}
           command: ['/bin/sh',
                     '-c',
