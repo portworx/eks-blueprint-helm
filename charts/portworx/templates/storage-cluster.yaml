@@ -93,10 +93,19 @@ spec:
 {{- if and (ne $drives "none") (not (hasPrefix "/" $drives)) }}
   cloudStorage:
     deviceSpecs:
-      {{- $driveNames := $drives | split ";" }}
-      {{- range $index, $name := $driveNames }}
-      - {{ $name }}
+    {{- $driveNames := $drives | split ";" }}
+    {{- range $index, $name := $driveNames }}
+      {{- $spec := $name | split "+" }}
+      {{- range $idx, $key := $spec }}
+      {{- if (hasPrefix "/" $key) }}
+      - {{ $key }}
+      {{- else if eq $idx "_0"}}
+      - {{ printf "%s%c" $key 44}}
+      {{- else }}
+        {{- $key }}
       {{- end }}
+      {{- end }}
+    {{- end }}
     {{- if and (ne $kvdbDevice "none") (not (hasPrefix "/" $kvdbDevice)) }}
     kvdbDeviceSpec: {{ $kvdbDevice }}
     {{- end }}
@@ -209,7 +218,6 @@ spec:
   stork:
     {{- if (and (.Values.stork) (eq .Values.stork true))}}
     enabled: true
-    image: "{{template "px.getStorkImage" . }}"
     {{- with .Values.storkSpec.volumes }}
     volumes:
       {{- toYaml . | nindent 4 }}
@@ -225,7 +233,6 @@ spec:
     {{- else }}
     enabled: false
     {{- end }}
-
   {{- if eq $volumesPresent "true" }}
   volumes:
   {{- if eq $isCoreOS true}}
@@ -256,7 +263,6 @@ spec:
     {{- toYaml . | nindent 2 }}
   {{- end}}
   {{- end }}
-
   {{- if (and (.Values.monitoring) (eq .Values.monitoring true)) }}
   monitoring:
     prometheus:
@@ -265,7 +271,6 @@ spec:
       alertManager:
         enabled: true
   {{- end }}
-
   csi:
     enabled: {{ .Values.csi  | default "false" }}
   autopilot:

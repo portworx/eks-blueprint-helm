@@ -36,16 +36,16 @@ release: {{ .Release.Name | quote }}
 {{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
   {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-    {{- cat (trim .Values.customRegistryURL) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
+    {{- if eq $product "PX-ENTERPRISE-DR" }}
+      {{- cat (trim .Values.customRegistryURL) "/dr/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
+    {{- else }}
+      {{- cat (trim .Values.customRegistryURL) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
+    {{- end }}
   {{- else -}}
-    {{- cat (trim .Values.customRegistryURL) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
+    {{- cat (trim .Values.customRegistryURL) "portworx/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
   {{- end -}}
 {{- else -}}
-  {{- if eq $product "PX-ENTERPRISE-DR" }}
-    {{- cat (trim .Values.repo.dr) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
-  {{- else }}
-    {{- cat (trim .Values.repo.enterprise) "/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
-  {{- end }}
+    {{ cat "portworx/px-operator:" (trim .Values.pxOperatorImageVersion) | replace " " ""}}
 {{- end -}}
 {{- end -}}
 
@@ -53,12 +53,16 @@ release: {{ .Release.Name | quote }}
 {{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
   {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-    {{- cat (trim .Values.customRegistryURL) "/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+    {{- if eq $product "PX-ENTERPRISE-DR" }}
+      {{- cat (trim .Values.customRegistryURL) "/dr/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+    {{- else }}
+      {{- cat (trim .Values.customRegistryURL) "/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+    {{- end }}
   {{- else -}}
-    {{- cat (trim .Values.customRegistryURL) "/px-enterprise:" (trim .Values.versions.enterprise)| replace " " ""}}
+    {{- cat (trim .Values.customRegistryURL) "portworx/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
   {{- end -}}
 {{- else -}}
-  {{- cat "portworx/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+    {{ cat "portworx/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
 {{- end -}}
 {{- end -}}
 
@@ -66,16 +70,16 @@ release: {{ .Release.Name | quote }}
 {{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
   {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-    {{- cat (trim .Values.customRegistryURL) "/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
+    {{- if eq $product "PX-ENTERPRISE-DR" }}
+      {{- cat (trim .Values.customRegistryURL) "/dr/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
+    {{- else }}
+      {{- cat (trim .Values.customRegistryURL) "/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
+    {{- end }}
   {{- else -}}
-    {{- cat (trim .Values.customRegistryURL) "/oci-monitor:" (trim .Values.imageVersion)| replace " " ""}}
+    {{- cat (trim .Values.customRegistryURL) "portworx/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
   {{- end -}}
 {{- else -}}
-  {{- if eq $product "PX-ENTERPRISE-DR" }}
-    {{- cat (trim .Values.repo.dr) "/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
-  {{- else }}
-    {{- cat (trim .Values.repo.enterprise) "/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
-  {{- end }}
+    {{ cat "portworx/oci-monitor:" (trim .Values.imageVersion) | replace " " ""}}
 {{- end -}}
 {{- end -}}
 
@@ -83,16 +87,16 @@ release: {{ .Release.Name | quote }}
 {{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
   {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-    {{- cat (trim .Values.customRegistryURL) "/stork:" (trim .Values.storkVersion)| replace " " ""}}
+    {{- if eq $product "PX-ENTERPRISE-DR" }}
+      {{- cat (trim .Values.customRegistryURL) "/dr/stork:" (trim .Values.storkVersion) | replace " " ""}}
+    {{- else }}
+      {{- cat (trim .Values.customRegistryURL) "/stork:" (trim .Values.storkVersion) | replace " " ""}}
+    {{- end }}
   {{- else -}}
-    {{- cat (trim .Values.customRegistryURL) "/stork:" (trim .Values.storkVersion) | replace " " ""}}
+    {{- cat (trim .Values.customRegistryURL) "portworx/stork:" (trim .Values.storkVersion) | replace " " ""}}
   {{- end -}}
 {{- else -}}
-  {{- if eq $product "PX-ENTERPRISE-DR" }}
-    {{- cat (trim .Values.repo.dr) "/stork:" (trim .Values.storkVersion) | replace " " ""}}
-  {{- else }}
-    {{- cat (trim .Values.repo.enterprise) "/stork:" (trim .Values.storkVersion) | replace " " ""}}
-  {{- end }}
+    {{ cat "openstorage/stork:" (trim .Values.storkVersion) | replace " " ""}}
 {{- end -}}
 {{- end -}}
 
@@ -100,16 +104,16 @@ release: {{ .Release.Name | quote }}
 {{- $product := .Values.awsProduct | default "PX-ENTERPRISE" }}
 {{- if (.Values.customRegistryURL) -}}
   {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
-    {{- cat (trim .Values.customRegistryURL) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
+    {{- if eq $product "PX-ENTERPRISE-DR" }}
+      {{- cat (trim .Values.customRegistryURL) "/dr/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
+    {{- else }}
+      {{- cat (trim .Values.customRegistryURL) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
+    {{- end }}
   {{- else -}}
-    {{- cat (trim .Values.customRegistryURL) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
+    {{- cat (trim .Values.customRegistryURL) "portworx/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
   {{- end -}}
 {{- else -}}
-  {{- if eq $product "PX-ENTERPRISE-DR" }}
-    {{- cat (trim .Values.repo.dr) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
-  {{- else }}
-    {{- cat (trim .Values.repo.enterprise) "/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
-  {{- end }}
+    {{ cat "portworx/autopilot:" (trim .Values.versions.autoPilot) | replace " " ""}}
 {{- end -}}
 {{- end -}}
 
