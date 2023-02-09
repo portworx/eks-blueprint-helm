@@ -1,0 +1,17 @@
+apiVersion: v1
+entries:
+  portworx:
+  - apiVersion: v1
+    appVersion: 2.12.0
+    created: "2023-02-09T03:16:51.113732253Z"
+    description: A Helm chart for installing Portworx on Kubernetes.
+    digest: 47fa71cddec2d3cf1543b44a36aaa3435dc2c5b227b5caf98d2b33c10b60709e
+    home: https://portworx.com/
+    icon: https://raw.githubusercontent.com/portworx/helm/master/doc/media/px-logo.png
+    name: portworx
+    sources:
+    - https://github.com/portworx/helm
+    urls:
+    - https://raw.githubusercontent.com/portworx/eks-blueprint-helm/namespace/repo/beta/portworx-2.12.0.tgz
+    version: 2.12.0
+generated: "2023-02-09T03:16:51.100251196Z"
