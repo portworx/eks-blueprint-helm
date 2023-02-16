@@ -2,8 +2,21 @@ apiVersion: v1
 entries:
   portworx:
   - apiVersion: v1
+    appVersion: 2.12.2
+    created: "2023-02-16T11:41:38.538119786Z"
+    description: A Helm chart for installing Portworx on Kubernetes.
+    digest: 6fe0d84807d299ec18e8b77054c6adb9b1df8281b55630c4d3f86b1cab94ac7c
+    home: https://portworx.com/
+    icon: https://raw.githubusercontent.com/portworx/helm/master/doc/media/px-logo.png
+    name: portworx
+    sources:
+    - https://github.com/portworx/helm
+    urls:
+    - https://raw.githubusercontent.com/portworx/eks-blueprint-helm/main/repo/stable/portworx-2.12.2.tgz
+    version: 2.12.2
+  - apiVersion: v1
     appVersion: 2.12.0
-    created: "2023-02-07T08:52:19.211643843Z"
+    created: "2023-02-16T11:41:38.535507013Z"
     description: A Helm chart for installing Portworx on Kubernetes.
     digest: 89c2f86fb682c88b7f367e40f84c2def9e7181a7ce36086d9639256067f05d47
     home: https://portworx.com/
@@ -15,7 +28,7 @@ entries:
     - https://raw.githubusercontent.com/portworx/eks-blueprint-helm/main/repo/stable/portworx-2.12.0.tgz
     version: 2.12.0
   - apiVersion: v1
-    created: "2023-02-07T08:52:19.209627251Z"
+    created: "2023-02-16T11:41:38.529836779Z"
     description: A Helm chart for installing Portworx on Kubernetes.
     digest: f6d89881634b6f6768d82217d15b2d6b3f7c41cde442a8e6749db42d2893b6da
     home: https://portworx.com/
@@ -27,7 +40,7 @@ entries:
     - https://raw.githubusercontent.com/portworx/eks-blueprint-helm/main/repo/stable/portworx-2.11.2.tgz
     version: 2.11.2
   - apiVersion: v1
-    created: "2023-02-07T08:52:19.195413071Z"
+    created: "2023-02-16T11:41:38.52055097Z"
     description: A Helm chart for installing Portworx on Kubernetes.
     digest: ad091b52829f721fd329bd7335fc5cb0de1487dc9521a9c40ee656aae2911e5f
     home: https://portworx.com/
@@ -38,4 +51,4 @@ entries:
     urls:
     - https://raw.githubusercontent.com/portworx/eks-blueprint-helm/main/repo/stable/portworx-2.11.0.tgz
     version: 2.11.0
-generated: "2023-02-07T08:52:19.191072286Z"
+generated: "2023-02-16T11:41:38.517474207Z"
