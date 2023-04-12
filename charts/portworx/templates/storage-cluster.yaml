@@ -202,7 +202,7 @@ spec:
         key: AZURE_TENANT_ID
   {{- end }}
   - name: PX_IMAGE
-    value: docker.io/portworx/px-enterprise:{{ .Values.versions.enterprise }}
+    value: docker.io/{{template "px.getImage" . }}
   {{- if and (.Values.aws.accessKeyId) (.Values.aws.secretAccessKey) }}
   - name: AWS_ACCESS_KEY_ID
     valueFrom:
