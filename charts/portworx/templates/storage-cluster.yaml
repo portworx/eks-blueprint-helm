@@ -30,7 +30,7 @@ kind: StorageCluster
 apiVersion: core.libopenstorage.org/v1
 metadata:
   name: "{{ required "Clustername cannot be empty" .Values.clusterName }}"
-  namespace: kube-system
+  namespace: {{ template "px.getDeploymentNamespace" . }}
   annotations:
     {{- if eq $openshiftInstall true }}
     portworx.io/is-openshift: "true"
@@ -63,7 +63,7 @@ metadata:
     app.kubernetes.io/managed-by: {{.Release.Service | quote }}
     app.kubernetes.io/instance: {{.Release.Name | quote }}
 spec:
-  image: portworx/oci-monitor:{{ required "A valid Image tag is required in the SemVer format" .Values.imageVersion }}
+  image: "{{template "px.getOCIImage" . }}"
   imagePullPolicy: Always
   {{- if not (eq $customRegistryURL "none") }}
   customImageRegistry: {{ $customRegistryURL }}
@@ -71,7 +71,6 @@ spec:
   {{- if not (eq $registrySecret "none") }}
   imagePullSecret: {{ $registrySecret }}
   {{- end }}
-
   kvdb:
   {{- if eq $internalKVDB true }}
     internal: true
@@ -94,10 +93,19 @@ spec:
 {{- if and (ne $drives "none") (not (hasPrefix "/" $drives)) }}
   cloudStorage:
     deviceSpecs:
-      {{- $driveNames := $drives | split ";" }}
-      {{- range $index, $name := $driveNames }}
-      - {{ $name }}
+    {{- $driveNames := $drives | split ";" }}
+    {{- range $index, $name := $driveNames }}
+      {{- $spec := $name | split "+" }}
+      {{- range $idx, $key := $spec }}
+      {{- if (hasPrefix "/" $key) }}
+      - {{ $key }}
+      {{- else if eq $idx "_0"}}
+      - {{ printf "%s%c" $key 44}}
+      {{- else }}
+        {{- $key }}
       {{- end }}
+      {{- end }}
+    {{- end }}
     {{- if and (ne $kvdbDevice "none") (not (hasPrefix "/" $kvdbDevice)) }}
     kvdbDeviceSpec: {{ $kvdbDevice }}
     {{- end }}
@@ -153,7 +161,6 @@ spec:
   secretsProvider: ibm-kp
     {{- end }}
   {{- end }}
-
   env:
   {{- with .Values.envs }}
     {{- toYaml . | nindent 2 }}
@@ -194,6 +201,8 @@ spec:
         name: px-azure
         key: AZURE_TENANT_ID
   {{- end }}
+  - name: PX_IMAGE
+    value: docker.io/{{template "px.getImage" . }}
   {{- if and (.Values.aws.accessKeyId) (.Values.aws.secretAccessKey) }}
   - name: AWS_ACCESS_KEY_ID
     valueFrom:
@@ -206,13 +215,9 @@ spec:
         name: px-aws-credentials
         key: awsSecretAccessKey
   {{- end }}
-
   stork:
     {{- if (and (.Values.stork) (eq .Values.stork true))}}
     enabled: true
-    {{- if .Values.storkVersion }}
-    image: {{ template "px.getStorkImage" . }}:{{ required "A valid Image tag is required in the SemVer format" .Values.storkVersion }}
-    {{- end }}
     {{- with .Values.storkSpec.volumes }}
     volumes:
       {{- toYaml . | nindent 4 }}
@@ -228,7 +233,6 @@ spec:
     {{- else }}
     enabled: false
     {{- end }}
-
   {{- if eq $volumesPresent "true" }}
   volumes:
   {{- if eq $isCoreOS true}}
@@ -259,7 +263,6 @@ spec:
     {{- toYaml . | nindent 2 }}
   {{- end}}
   {{- end }}
-
   {{- if (and (.Values.monitoring) (eq .Values.monitoring true)) }}
   monitoring:
     prometheus:
@@ -268,15 +271,18 @@ spec:
       alertManager:
         enabled: true
   {{- end }}
-
-  {{- if (and (.Values.csi) (eq .Values.csi true))}}
   csi:
-    enabled: true
-  {{- end }}
-  {{- if (and (.Values.aut) (eq .Values.aut true))}}
+    enabled: {{ .Values.csi  | default "false" }}
   autopilot:
-    enabled: true
-  {{- end }}
+    enabled: {{ .Values.aut  | default "false" }}
+    {{- if (and (.Values.aut) (eq .Values.aut true))}}
+    image: "{{template "px.getAutopilotImage" . }}"
+    providers:
+    - name: default
+      type: prometheus
+      params:
+        url: http://prometheus:9090
+    {{- end }}  
 
   {{- with .Values.tolerations }}
   placement:
