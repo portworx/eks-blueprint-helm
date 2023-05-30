@@ -54,15 +54,15 @@ release: {{ .Release.Name | quote }}
 {{- if (.Values.customRegistryURL) -}}
   {{- if (eq "/" (.Values.customRegistryURL | regexFind "/")) -}}
     {{- if eq $product "PX-ENTERPRISE-DR" }}
-      {{- cat (trim .Values.customRegistryURL) "/dr/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+      {{- cat (trim .Values.customRegistryURL) "/dr/px-enterprise:" (trim .Values.imageVersion) | replace " " ""}}
     {{- else }}
-      {{- cat (trim .Values.customRegistryURL) "/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+      {{- cat (trim .Values.customRegistryURL) "/px-enterprise:" (trim .Values.imageVersion) | replace " " ""}}
     {{- end }}
   {{- else -}}
-    {{- cat (trim .Values.customRegistryURL) "portworx/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+    {{- cat (trim .Values.customRegistryURL) "portworx/px-enterprise:" (trim .Values.imageVersion) | replace " " ""}}
   {{- end -}}
 {{- else -}}
-    {{ cat "portworx/px-enterprise:" (trim .Values.versions.enterprise) | replace " " ""}}
+    {{ cat "portworx/px-enterprise:" (trim .Values.imageVersion) | replace " " ""}}
 {{- end -}}
 {{- end -}}
 
