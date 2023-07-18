@@ -1,6 +1,6 @@
 name: portworx
-version: "2.13.5"
-appVersion: 2.13.5
+version: "3.0.0"
+appVersion: 3.0.0
 description: A Helm chart for installing Portworx on Kubernetes.
 tillerversion: ">=2.9.0"
 apiVersion: v1
